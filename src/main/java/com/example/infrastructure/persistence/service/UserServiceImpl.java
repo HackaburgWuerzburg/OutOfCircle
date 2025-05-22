@@ -1,0 +1,72 @@
+package com.example.infrastructure.persistence.service;
+
+import com.example.domain.models.User;
+import com.example.domain.ports.UserService;
+import com.example.infrastructure.mapper.UserMapper;
+import com.example.infrastructure.persistence.entity.UserEntity;
+import com.example.infrastructure.persistence.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id)
+                .map(userMapper::entityToDomain);
+    }
+
+    @Override
+    public Optional<User> findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(userMapper::entityToDomain);
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userMapper::entityToDomain);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::entityToDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public User createUser(User user) {
+        UserEntity savedUserEntity = userRepository.save(userMapper.domainToEntity(user));
+        return userMapper.entityToDomain(savedUserEntity);
+    }
+
+    @Override
+    public User updateUser(Long id, User user) {
+        UserEntity updatedUserEntity = userMapper.domainToEntity(user);
+        updatedUserEntity.setId(id);
+        return userMapper.entityToDomain(userRepository.save(updatedUserEntity));
+    }
+
+    @Override
+    public boolean deleteUserById(Long id) {
+        if(userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        } else{
+            return false;
+        }
+    }
+}
