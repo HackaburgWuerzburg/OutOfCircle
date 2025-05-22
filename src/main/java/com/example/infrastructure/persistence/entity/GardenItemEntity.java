@@ -13,4 +13,27 @@ public class GardenItemEntity {
     //@ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "garden")
     private Long gardenId;
+
+    public GardenItemEntity() {
+    }
+
+    public GardenItemEntity(Long gardenId) {
+        this.gardenId = gardenId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getGardenId() {
+        return gardenId;
+    }
+
+    public void setGardenId(Long gardenId) {
+        this.gardenId = gardenId;
+    }
 }
