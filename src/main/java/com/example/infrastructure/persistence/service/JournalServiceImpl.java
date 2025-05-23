@@ -25,6 +25,12 @@ public class JournalServiceImpl implements JournalService {
     }
 
     @Override
+    public Optional<Journal> findLatestJournalByUserId(Long userId) {
+        return journalRepository.findLatestJournalByUserId(userId)
+                .map(journalMapper::entityToDomain);
+    }
+
+    @Override
     public Optional<Journal> findJournalById(Long id) {
         return journalRepository.findById(id)
                 .map(journalMapper::entityToDomain);

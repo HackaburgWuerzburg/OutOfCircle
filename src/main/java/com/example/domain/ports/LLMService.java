@@ -1,5 +1,6 @@
 package com.example.domain.ports;
 
+import com.example.domain.enums.DifficultyType;
 import com.example.domain.models.Challenge;
 
 import java.util.List;
@@ -12,5 +13,7 @@ public interface LLMService {
      * @return Suggested daily challenge
      */
     String generateDailyChallenge(String userPattern);
-    String generateChallengeFromPreviousOnes(List<Challenge> history);
+    String generateChallengeFromTopicAndDifficulty(List<Challenge> challenges, String topic, DifficultyType difficulty);
+    String detectTopicFromJournal(String journalText);
+
 }

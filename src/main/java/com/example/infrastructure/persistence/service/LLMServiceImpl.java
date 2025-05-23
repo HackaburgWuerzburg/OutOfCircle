@@ -1,5 +1,6 @@
 package com.example.infrastructure.persistence.service;
 
+import com.example.domain.enums.DifficultyType;
 import com.example.domain.models.Challenge;
 import com.example.domain.models.Journal;
 import com.example.domain.ports.LLMService;
@@ -40,25 +41,45 @@ public class LLMServiceImpl implements LLMService {
                 .collect(Collectors.joining("\n"));
 
         String prompt = "Here are the user's previous daily challenges:\n" + combined +
-                "\nBased on these, suggest a new short daily challenge in one sentence.";
+                "\n\nBased on the style of these, generate a new daily challenge. Respond with exactly ONE short sentence, nothing else.";
 
         return generateDailyChallenge(prompt);
     }
 
+    @Override
+    public String detectTopicFromJournal(String journalText) {
+        String prompt = """
+        The user wrote the following journal entry:
 
-    public String generateChallengeFromJournal(List<Journal> entries) {
-        if (entries == null || entries.isEmpty()) {
-            return "No journal entries found.";
-        }
+        "%s"
 
-        // Tüm içerikleri tek metne birleştir
-        String combinedContent = entries.stream()
-                .map(Journal::getContent)
+        Decide which topic this journal fits best under, choosing only from the following: 
+        fitness, productivity, mindfulness, social, nutrition, learning.
+
+        Respond with only the topic word.
+        """.formatted(journalText);
+
+        String result = generateDailyChallenge(prompt);
+        return result.trim().toLowerCase(); // örn: "fitness"
+    }
+
+    @Override
+    public String generateChallengeFromTopicAndDifficulty(List<Challenge> challenges, String topic, DifficultyType difficulty) {
+        String combined = challenges.stream()
+                .map(Challenge::getContent)
                 .collect(Collectors.joining("\n"));
 
-        // Kullanıcı kalıpları olarak LLM’e gönder
-        return generateDailyChallenge(combinedContent);
+        String prompt = """
+        You are generating a new daily challenge in the topic "%s" with difficulty "%s".
+        Here are previous challenges in this topic:
+        %s
+
+        Based on these, suggest ONE new daily challenge. Respond with exactly one short sentence and nothing else.
+        """.formatted(topic, difficulty.name(), combined);
+
+        return generateDailyChallenge(prompt);
     }
+
 
     @Override
     public String generateDailyChallenge(String userPattern) {
@@ -70,7 +91,7 @@ public class LLMServiceImpl implements LLMService {
                 "model": "deepseek-chat",
                 "messages": [{
                     "role": "user",
-                    "content": "The user has the following patterns:\\n%s\\nSuggest one short daily goal to break this comfort zone."
+                    "content": "%s"
                 }],
                 "temperature": 0.7
             }
@@ -101,21 +122,27 @@ public class LLMServiceImpl implements LLMService {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(responseBody);
 
-            if (!root.has("choices")) {
-                return "Response missing 'choices'";
+            JsonNode choices = root.path("choices");
+            if (!choices.isArray() || choices.isEmpty()) {
+                return "Response missing or empty 'choices'";
             }
 
-            JsonNode firstChoice = root.path("choices").get(0);
-            if (firstChoice == null || !firstChoice.has("message")) {
-                return "Response missing 'message'";
-            }
-
+            JsonNode firstChoice = choices.get(0);
             JsonNode message = firstChoice.path("message");
-            if (!message.has("content")) {
-                return "Response missing 'content'";
+
+            if (message.has("content")) {
+                String raw = message.get("content").asText();
+
+                // Temizlik: baştaki ve sondaki tırnakları ve nokta+tırnağı sil
+                String cleaned = raw.trim()
+                        .replaceAll("^\"+", "")         // baştaki " sil
+                        .replaceAll("\"+\\.*$", "")     // sondaki ". sil
+                        .trim();
+
+                return cleaned;
             }
 
-            return message.get("content").asText();
+            return "Response missing 'message.content'";
         } catch (Exception e) {
             e.printStackTrace();
             return "Sorry, failed to parse the challenge.";

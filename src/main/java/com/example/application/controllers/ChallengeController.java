@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/challenges")
@@ -26,9 +27,16 @@ public class ChallengeController {
     }
 
     @GetMapping("/generate/{userId}")
-    public ResponseEntity<String> generateNewChallenge(@PathVariable Long userId) {
-        String challenge = challengeService.generateAndSaveChallenge(userId);
-        return ResponseEntity.ok(challenge);
+    public ResponseEntity<?> generateNewChallenge(@PathVariable Long userId) {
+        try {
+            String challenge = challengeService.generateAndSaveChallenge(userId);
+            return ResponseEntity.ok(challenge);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or journal not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Challenge generation failed: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")

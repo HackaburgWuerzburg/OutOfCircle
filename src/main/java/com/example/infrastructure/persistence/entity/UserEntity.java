@@ -1,5 +1,6 @@
 package com.example.infrastructure.persistence.entity;
 
+import com.example.domain.enums.DifficultyType;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,13 +20,18 @@ public class UserEntity {
     @Column(nullable = false)
     private String username;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty", nullable = false)
+    private DifficultyType difficulty;
+
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password, String username) {
+    public UserEntity(String email, String password, String username, DifficultyType difficulty) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.difficulty = difficulty;
     }
 
     public Long getId() {
@@ -58,5 +64,13 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public DifficultyType getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(DifficultyType difficulty) {
+        this.difficulty = difficulty;
     }
 }
