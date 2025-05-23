@@ -26,10 +26,11 @@ public class ChallengeEntity {
     @Column(nullable = false)
     private String content;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private DifficultyType difficulty;
 
-    @Column(nullable = false)
+    @Column(name = "is_completed", nullable = false)
     private boolean isCompleted;
 
     public ChallengeEntity() {

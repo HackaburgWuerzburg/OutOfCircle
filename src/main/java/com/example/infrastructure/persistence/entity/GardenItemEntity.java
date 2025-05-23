@@ -11,7 +11,7 @@ public class GardenItemEntity {
     private Long id;
 
     //@ManyToOne
-    @JoinColumn(name = "garden_id")
+    @JoinColumn(name = "gardenId")
     private Long gardenId;
 
     public GardenItemEntity() {
