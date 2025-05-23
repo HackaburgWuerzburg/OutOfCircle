@@ -2,13 +2,14 @@ package com.example.domain.models;
 
 import com.example.domain.enums.DifficultyType;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Challenge {
     private Long id;
     private Long userId;
     private String topic;
-    private Date date;
+    private LocalDate date;
     private String content;
     private DifficultyType difficulty;
     private boolean isCompleted;
@@ -16,7 +17,7 @@ public class Challenge {
     public Challenge() {
     }
 
-    public Challenge(Long id, Long userId, String topic, Date date, String content, DifficultyType difficulty, boolean isCompleted) {
+    public Challenge(Long id, Long userId, String topic, LocalDate date, String content, DifficultyType difficulty, boolean isCompleted) {
         this.id = id;
         this.userId = userId;
         this.topic = topic;
@@ -50,11 +51,11 @@ public class Challenge {
         this.topic = topic;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

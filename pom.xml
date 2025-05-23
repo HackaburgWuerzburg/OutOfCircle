@@ -11,9 +11,9 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>green-mobility-api</artifactId>
+    <artifactId>out-of-circle</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>green-mobility-api</name>
+    <name>out-of-circle</name>
     <description>An API project with hexagonal architecture</description>
 
     <properties>

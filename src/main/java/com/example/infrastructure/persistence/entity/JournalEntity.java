@@ -2,6 +2,7 @@ package com.example.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,7 @@ public class JournalEntity {
     private Long userId;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private String content;
@@ -24,7 +25,7 @@ public class JournalEntity {
     public JournalEntity() {
     }
 
-    public JournalEntity(Long userId, Date date, String content) {
+    public JournalEntity(Long userId, LocalDate date, String content) {
         this.userId = userId;
         this.date = date;
         this.content = content;
@@ -46,11 +47,11 @@ public class JournalEntity {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

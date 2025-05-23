@@ -2,12 +2,13 @@ package com.example.application.dto;
 
 import com.example.domain.enums.DifficultyType;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class ChallengeInput {
     private Long userId;
     private String topic;
-    private Date date;
+    private LocalDate date;
     private String content;
     private DifficultyType difficulty;
     private boolean isCompleted;
@@ -28,11 +29,11 @@ public class ChallengeInput {
         this.topic = topic;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

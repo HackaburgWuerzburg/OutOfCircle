@@ -1,17 +1,18 @@
 package com.example.domain.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Journal {
     private Long id;
     private Long userId;
-    private Date date;
+    private LocalDate date;
     private String content;
 
     public Journal() {
     }
 
-    public Journal(Long id, Long userId, Date date, String content) {
+    public Journal(Long id, Long userId, LocalDate date, String content) {
         this.id = id;
         this.userId = userId;
         this.date = date;
@@ -34,11 +35,11 @@ public class Journal {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

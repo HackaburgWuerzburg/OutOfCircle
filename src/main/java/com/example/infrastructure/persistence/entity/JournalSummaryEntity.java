@@ -3,6 +3,7 @@ package com.example.infrastructure.persistence.entity;
 import com.example.domain.enums.MoodTag;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,7 @@ public class JournalSummaryEntity {
     private Long userId;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private String summary;
@@ -31,7 +32,7 @@ public class JournalSummaryEntity {
     public JournalSummaryEntity() {
     }
 
-    public JournalSummaryEntity(Long journalId, Long userId, Date date, String summary, MoodTag moodTag) {
+    public JournalSummaryEntity(Long journalId, Long userId, LocalDate date, String summary, MoodTag moodTag) {
         this.journalId = journalId;
         this.userId = userId;
         this.date = date;
@@ -63,11 +64,11 @@ public class JournalSummaryEntity {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

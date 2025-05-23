@@ -17,12 +17,12 @@ public class GardenEntity {
     private Long userId;
 
     @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GardenItem> items;
+    private List<GardenItemEntity> items;
 
     public GardenEntity() {
     }
 
-    public GardenEntity(Long userId, List<GardenItem> items) {
+    public GardenEntity(Long userId, List<GardenItemEntity> items) {
         this.userId = userId;
         this.items = items;
     }
@@ -43,11 +43,11 @@ public class GardenEntity {
         this.userId = userId;
     }
 
-    public List<GardenItem> getItems() {
+    public List<GardenItemEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<GardenItem> items) {
+    public void setItems(List<GardenItemEntity> items) {
         this.items = items;
     }
 }

@@ -10,8 +10,8 @@ public class GardenItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "garden")
+    //@ManyToOne
+    @JoinColumn(name = "garden_id")
     private Long gardenId;
 
     public GardenItemEntity() {

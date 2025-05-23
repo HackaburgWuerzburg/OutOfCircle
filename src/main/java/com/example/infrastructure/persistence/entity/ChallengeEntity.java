@@ -3,6 +3,7 @@ package com.example.infrastructure.persistence.entity;
 import com.example.domain.enums.DifficultyType;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,7 +21,7 @@ public class ChallengeEntity {
     private String topic;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private String content;
@@ -34,7 +35,7 @@ public class ChallengeEntity {
     public ChallengeEntity() {
     }
 
-    public ChallengeEntity(Long userId, String topic, Date date, String content, DifficultyType difficulty, boolean isCompleted) {
+    public ChallengeEntity(Long userId, String topic, LocalDate date, String content, DifficultyType difficulty, boolean isCompleted) {
         this.userId = userId;
         this.topic = topic;
         this.date = date;
@@ -67,11 +68,11 @@ public class ChallengeEntity {
         this.topic = topic;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

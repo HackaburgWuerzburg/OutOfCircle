@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface GardenMapper {
     Garden entityToDomain(GardenEntity entity);
-    GardenEntity DomainToEntity(Garden garden);
+    GardenEntity domainToEntity(Garden garden);
 
     Garden inputToDomain(GardenInput input);
 }

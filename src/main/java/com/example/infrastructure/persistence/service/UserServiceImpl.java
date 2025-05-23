@@ -5,6 +5,7 @@ import com.example.domain.ports.UserService;
 import com.example.infrastructure.mapper.UserMapper;
 import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

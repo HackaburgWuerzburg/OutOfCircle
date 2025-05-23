@@ -1,11 +1,12 @@
 package com.example.application.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class JournalInput {
 
     private Long userId;
-    private Date date;
+    private LocalDate date;
     private String content;
 
     public Long getUserId() {
@@ -16,11 +17,11 @@ public class JournalInput {
         this.userId = userId;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

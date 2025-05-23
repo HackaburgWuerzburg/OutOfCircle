@@ -2,6 +2,7 @@ package com.example.domain.ports;
 
 import com.example.domain.models.Journal;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface JournalService {
     Optional<Journal> findJournalById(Long id);
     List<Journal> findJournalByUserId(Long userId);
-    Optional<Journal> findJournalByDate(Date date);
+    Optional<Journal> findJournalByDate(LocalDate date);
     List<Journal> findAllJournals();
 
     //mutation
