@@ -17,15 +17,15 @@ public class LLMServiceImpl implements LLMService {
     public String generateDailyChallenge(String userPattern) {
         try {
             String requestBody = """
-                {
-                    "model": "deepseek-chat",
-                    "messages": [{
-                        "role": "user",
-                        "content": "The user has the following patterns:\\n%s\\nSuggest one short daily goal to break this comfort zone."
-                    }],
-                    "temperature": 0.7
-                }
-                """.formatted(userPattern);
+                    {
+                        "model": "deepseek-chat",
+                        "messages": [{
+                            "role": "user",
+                            "content": "The user has the following patterns:\\n%s\\nSuggest one short daily goal to break this comfort zone."
+                        }],
+                        "temperature": 0.7
+                    }
+                    """.formatted(userPattern);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL))
@@ -37,22 +37,35 @@ public class LLMServiceImpl implements LLMService {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            System.out.println("LLM Raw Response: " + response.body());
+
             return extractChallenge(response.body());
         } catch (Exception e) {
             e.printStackTrace();
             return "Sorry, we couldn't generate your challenge today.";
         }
     }
+
     private String extractChallenge(String responseBody) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(responseBody);
-            return root
-                    .path("choices")
-                    .get(0)
-                    .path("message")
-                    .path("content")
-                    .asText();
+
+            if (!root.has("choices")) {
+                return "Response missing 'choices'";
+            }
+
+            JsonNode firstChoice = root.path("choices").get(0);
+            if (firstChoice == null || !firstChoice.has("message")) {
+                return "Response missing 'message'";
+            }
+
+            JsonNode message = firstChoice.path("message");
+            if (!message.has("content")) {
+                return "Response missing 'content'";
+            }
+
+            return message.get("content").asText();
         } catch (Exception e) {
             e.printStackTrace();
             return "Sorry, failed to parse the challenge.";
