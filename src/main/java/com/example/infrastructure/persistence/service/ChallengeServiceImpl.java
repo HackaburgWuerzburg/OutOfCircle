@@ -66,7 +66,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<Challenge> findChallengesByCompletionStatus(boolean isCompleted) {
-        return challengeRepository.findByCompletedIs(isCompleted)
+        return challengeRepository.findByIsCompleted(isCompleted)
                 .stream()
                 .map(challengeMapper::entityToDomain)
                 .collect(Collectors.toList());

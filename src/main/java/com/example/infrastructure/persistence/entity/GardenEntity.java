@@ -3,6 +3,7 @@ package com.example.infrastructure.persistence.entity;
 import com.example.domain.models.GardenItem;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,8 @@ public class GardenEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Long userId;
 
-    @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
+    @JoinColumn(name = "gardenId", referencedColumnName = "id")
     private List<GardenItemEntity> items;
 
     public GardenEntity() {
@@ -24,7 +26,7 @@ public class GardenEntity {
 
     public GardenEntity(Long userId, List<GardenItemEntity> items) {
         this.userId = userId;
-        this.items = items;
+        this.items = new ArrayList<>(items);
     }
 
     public Long getId() {

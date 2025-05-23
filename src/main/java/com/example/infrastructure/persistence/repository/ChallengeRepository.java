@@ -14,6 +14,6 @@ public interface ChallengeRepository extends JpaRepository<ChallengeEntity, Long
     List<ChallengeEntity> findByUserId(Long userId);
     List<ChallengeEntity> findByTopic(String topic);
     List<ChallengeEntity> findByDifficulty(DifficultyType difficulty);
-    List<ChallengeEntity> findByCompletedIs(boolean isCompleted);
+    List<ChallengeEntity> findByIsCompleted(boolean isCompleted);
     List<ChallengeEntity> findByDate(LocalDate date);
 }
