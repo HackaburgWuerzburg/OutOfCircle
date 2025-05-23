@@ -51,8 +51,8 @@ public class DatabaseController {
     @PostMapping("/fill-database")
     public ResponseEntity<String> fillDatabase() {
         List<UserEntity> users = new ArrayList<>();
-        users.add(new UserEntity("alice@example.com", "123456", "alice", DifficultyType.EASY));
-        users.add(new UserEntity("bob@example.com", "654321", "bob", DifficultyType.HARD));
+        users.add(new UserEntity("alice@example.com", "123456", "alice", DifficultyType.EASY, null));
+        users.add(new UserEntity("bob@example.com", "654321", "bob", DifficultyType.HARD, null));
         userRepository.saveAll(users);
 
         List<JournalEntity> journals = new ArrayList<>();

@@ -2,7 +2,6 @@ package com.example.infrastructure.persistence.service;
 
 import com.example.domain.enums.DifficultyType;
 import com.example.domain.models.Challenge;
-import com.example.domain.models.Journal;
 import com.example.domain.ports.LLMService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

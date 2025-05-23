@@ -13,6 +13,8 @@ public interface LLMService {
      * @return Suggested daily challenge
      */
     String generateDailyChallenge(String userPattern);
+
+    String detectTopicFromQuestionnaire(String promptText);
     String generateChallengeFromTopicAndDifficulty(List<Challenge> challenges, String topic, DifficultyType difficulty);
     String detectTopicFromJournal(String journalText);
 
