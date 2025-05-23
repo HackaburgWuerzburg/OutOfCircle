@@ -10,6 +10,9 @@ public interface UserService {
     Optional<User> findUserByUsername(String username);
     Optional<User> findUserByEmail(String email);
     List<User> findAllUsers();
+    void updateUserTopic(Long userId, String topicStr);
+    void assignTopicFromQuestionnaire(Long userId, String promptText);
+
 
     //mutation
     User createUser(User user);

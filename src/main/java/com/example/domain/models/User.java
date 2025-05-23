@@ -1,6 +1,7 @@
 package com.example.domain.models;
 
 import com.example.domain.enums.DifficultyType;
+import com.example.domain.enums.TopicType;
 
 public class User {
     private Long id;
@@ -11,6 +12,7 @@ public class User {
     private int skipCountToday;
     private boolean rewardGivenToday;
     private int coin;
+    private TopicType topicType;
 
     public User() {
     }
@@ -24,6 +26,7 @@ public class User {
         this.skipCountToday = 2;
         this.rewardGivenToday = false;
         this.coin = 0;
+        this.topicType = null;
     }
 
     public Long getId() {
@@ -88,5 +91,13 @@ public class User {
 
     public void setCoin(int coin) {
         this.coin = coin;
+    }
+
+    public TopicType getTopicType() {
+        return topicType;
+    }
+
+    public void setTopicType(TopicType topicType) {
+        this.topicType = topicType;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.infrastructure.persistence.service;
 
+import com.example.domain.enums.TopicType;
 import com.example.domain.models.User;
 import com.example.domain.ports.UserService;
 import com.example.infrastructure.mapper.UserMapper;
@@ -17,11 +18,42 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final LLMServiceImpl llmService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, LLMServiceImpl llmService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.llmService = llmService;
     }
+
+    @Override
+    public void assignTopicFromQuestionnaire(Long userId, String promptText) {
+        String topicStr = llmService.detectTopicFromQuestionnaire(promptText);
+
+        TopicType topicEnum;
+        try {
+            topicEnum = TopicType.valueOf(topicStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid topic from LLM: " + topicStr);
+        }
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setTopic(topicEnum);
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void updateUserTopic(Long userId, String topicStr) {
+        TopicType topicEnum = TopicType.valueOf(topicStr.toUpperCase());
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setTopic(topicEnum);
+        userRepository.save(user);
+    }
+
 
     @Override
     public Optional<User> findUserById(Long id) {

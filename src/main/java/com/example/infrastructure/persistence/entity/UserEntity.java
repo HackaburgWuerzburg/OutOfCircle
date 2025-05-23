@@ -1,6 +1,7 @@
 package com.example.infrastructure.persistence.entity;
 
 import com.example.domain.enums.DifficultyType;
+import com.example.domain.enums.TopicType;
 import jakarta.persistence.*;
 
 @Entity
@@ -33,10 +34,14 @@ public class UserEntity {
     @Column(name = "coin")
     private int coin;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "topic")
+    private TopicType topic;
+
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password, String username, DifficultyType difficulty) {
+    public UserEntity(String email, String password, String username, DifficultyType difficulty, TopicType topic) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -44,6 +49,7 @@ public class UserEntity {
         this.skipCountToday = 2;
         this.rewardGivenToday = false;
         this.coin = 0;
+        this.topic = topic;
     }
 
     public Long getId() {
@@ -108,5 +114,13 @@ public class UserEntity {
 
     public void setCoin(int coin) {
         this.coin = coin;
+    }
+
+    public TopicType getTopic() {
+        return topic;
+    }
+
+    public void setTopic(TopicType topic) {
+        this.topic = topic;
     }
 }

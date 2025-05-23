@@ -64,6 +64,24 @@ public class LLMServiceImpl implements LLMService {
     }
 
     @Override
+    public String detectTopicFromQuestionnaire(String promptText) {
+        String prompt = """
+    Based on the user's answers:
+
+    %s
+
+    Choose the single most relevant topic from the following list: 
+    fitness, productivity, mindfulness, social, nutrition, learning.
+
+    Respond only with the topic word.
+    """.formatted(promptText);
+
+        String result = generateDailyChallenge(prompt);
+        return result.trim().toLowerCase(); // örn: "mindfulness"
+    }
+
+
+    @Override
     public String generateChallengeFromTopicAndDifficulty(List<Challenge> challenges, String topic, DifficultyType difficulty) {
         String combined = challenges.stream()
                 .map(Challenge::getContent)
