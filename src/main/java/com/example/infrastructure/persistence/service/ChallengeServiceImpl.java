@@ -3,14 +3,13 @@ package com.example.infrastructure.persistence.service;
 import com.example.domain.enums.DifficultyType;
 import com.example.domain.models.Challenge;
 import com.example.domain.ports.ChallengeService;
+import com.example.domain.ports.LLMService;
 import com.example.infrastructure.mapper.ChallengeMapper;
 import com.example.infrastructure.persistence.entity.ChallengeEntity;
 import com.example.infrastructure.persistence.repository.ChallengeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,10 +19,37 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     private final ChallengeRepository challengeRepository;
     private final ChallengeMapper challengeMapper;
+    private final LLMService llmService;
 
-    public ChallengeServiceImpl(ChallengeRepository challengeRepository, ChallengeMapper challengeMapper) {
+    public ChallengeServiceImpl(ChallengeRepository challengeRepository, ChallengeMapper challengeMapper, LLMService llmService) {
         this.challengeRepository = challengeRepository;
         this.challengeMapper = challengeMapper;
+        this.llmService = llmService;
+    }
+    public String generateAndSaveChallenge(Long userId) {
+        List<Challenge> history = challengeRepository.findByUserId(userId)
+                .stream()
+                .map(challengeMapper::entityToDomain)
+                .collect(Collectors.toUnmodifiableList());
+
+        String newChallengeText = llmService.generateChallengeFromPreviousOnes(history);
+
+        // Sadece bir cümleyle bitmiyorsa nokta ekle
+        if (!newChallengeText.trim().endsWith(".")) {
+            newChallengeText = newChallengeText.trim() + ".";
+        }
+
+        Challenge newChallenge = new Challenge();
+        newChallenge.setUserId(userId);
+        newChallenge.setContent(newChallengeText);
+        newChallenge.setDate(LocalDate.now());
+        newChallenge.setCompleted(false); // başlangıçta tamamlanmamış
+        newChallenge.setTopic("LLM Generated"); // istersen konu ekleyebilirsin
+        newChallenge.setDifficulty(DifficultyType.EASY); // varsayılan bir zorluk
+
+        challengeRepository.save(challengeMapper.domainToEntity(newChallenge));
+
+        return newChallengeText;
     }
 
     @Override

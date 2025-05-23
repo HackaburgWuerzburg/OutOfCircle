@@ -1,5 +1,9 @@
 package com.example.domain.ports;
 
+import com.example.domain.models.Challenge;
+
+import java.util.List;
+
 public interface LLMService {
     /**
      * Generates a motivational or behavior-breaking daily goal based on the user's pattern summary.
@@ -8,4 +12,5 @@ public interface LLMService {
      * @return Suggested daily challenge
      */
     String generateDailyChallenge(String userPattern);
+    String generateChallengeFromPreviousOnes(List<Challenge> history);
 }

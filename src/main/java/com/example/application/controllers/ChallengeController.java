@@ -11,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/challenges")
@@ -25,6 +23,12 @@ public class ChallengeController {
     public ChallengeController(ChallengeServiceImpl challengeService, ChallengeMapper challengeMapper) {
         this.challengeService = challengeService;
         this.challengeMapper = challengeMapper;
+    }
+
+    @GetMapping("/generate/{userId}")
+    public ResponseEntity<String> generateNewChallenge(@PathVariable Long userId) {
+        String challenge = challengeService.generateAndSaveChallenge(userId);
+        return ResponseEntity.ok(challenge);
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,7 @@
 package com.example.infrastructure.persistence.service;
 
+import com.example.domain.models.Challenge;
+import com.example.domain.models.Journal;
 import com.example.domain.ports.LLMService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LLMServiceImpl implements LLMService {
@@ -28,6 +32,32 @@ public class LLMServiceImpl implements LLMService {
         } catch (Exception e) {
             return input;
         }
+    }
+
+    public String generateChallengeFromPreviousOnes(List<Challenge> pastChallenges) {
+        String combined = pastChallenges.stream()
+                .map(Challenge::getContent)
+                .collect(Collectors.joining("\n"));
+
+        String prompt = "Here are the user's previous daily challenges:\n" + combined +
+                "\nBased on these, suggest a new short daily challenge in one sentence.";
+
+        return generateDailyChallenge(prompt);
+    }
+
+
+    public String generateChallengeFromJournal(List<Journal> entries) {
+        if (entries == null || entries.isEmpty()) {
+            return "No journal entries found.";
+        }
+
+        // Tüm içerikleri tek metne birleştir
+        String combinedContent = entries.stream()
+                .map(Journal::getContent)
+                .collect(Collectors.joining("\n"));
+
+        // Kullanıcı kalıpları olarak LLM’e gönder
+        return generateDailyChallenge(combinedContent);
     }
 
     @Override
