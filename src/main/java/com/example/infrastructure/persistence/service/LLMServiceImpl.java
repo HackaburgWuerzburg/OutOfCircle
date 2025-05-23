@@ -1,5 +1,7 @@
 package com.example.infrastructure.persistence.service;
 import com.example.domain.ports.LLMService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -35,10 +37,25 @@ public class LLMServiceImpl implements LLMService {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return response.body();
+            return extractChallenge(response.body());
         } catch (Exception e) {
             e.printStackTrace();
             return "Sorry, we couldn't generate your challenge today.";
+        }
+    }
+    private String extractChallenge(String responseBody) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(responseBody);
+            return root
+                    .path("choices")
+                    .get(0)
+                    .path("message")
+                    .path("content")
+                    .asText();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Sorry, failed to parse the challenge.";
         }
     }
 }
