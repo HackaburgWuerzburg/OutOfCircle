@@ -10,8 +10,8 @@ import java.net.http.HttpResponse;
 
 @Service
 public class LLMServiceImpl implements LLMService {
-    private static final String API_KEY = "sk-063b3692e0d04046a584ccb2626fe63c";
-    private static final String API_URL = "https://api.deepseek.com/v1/chat/completions"; // or OpenAI/others
+    private static final String API_KEY = "sk-0fc837e1c70242399c7b276e26c6c64b";
+    private static final String API_URL = "https://api.deepseek.com/v1/chat/completions";
 
     @Override
     public String generateDailyChallenge(String userPattern) {
@@ -29,7 +29,7 @@ public class LLMServiceImpl implements LLMService {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL))
-                    .header("X-API-KEY", API_KEY)
+                    .header("Authorization", "Bearer " + API_KEY)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
