@@ -29,6 +29,12 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/admin/reset-daily-stats")
+    public ResponseEntity<String> resetDailyStats() {
+        userService.resetDailyUserStats();
+        return ResponseEntity.ok("Daily stats reset.");
+    }
+
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         return userService.findUserByUsername(username)

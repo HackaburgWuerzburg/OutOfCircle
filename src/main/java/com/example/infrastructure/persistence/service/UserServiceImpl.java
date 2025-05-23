@@ -6,6 +6,7 @@ import com.example.infrastructure.mapper.UserMapper;
 import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,5 +70,16 @@ public class UserServiceImpl implements UserService {
         } else{
             return false;
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // her gece 00:00'da çalışır
+    public void resetDailyUserStats() {
+        List<UserEntity> users = userRepository.findAll();
+        for (UserEntity user : users) {
+            user.setSkipCountToday(0);
+            user.setRewardGivenToday(false);
+        }
+        userRepository.saveAll(users);
+        System.out.println("✅ Daily user stats reset.");
     }
 }

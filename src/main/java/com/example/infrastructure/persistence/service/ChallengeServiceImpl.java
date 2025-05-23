@@ -8,6 +8,7 @@ import com.example.domain.ports.LLMService;
 import com.example.infrastructure.mapper.ChallengeMapper;
 import com.example.infrastructure.mapper.JournalMapper;
 import com.example.infrastructure.persistence.entity.ChallengeEntity;
+import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.ChallengeRepository;
 import com.example.infrastructure.persistence.repository.JournalRepository;
 import com.example.infrastructure.persistence.repository.UserRepository;
@@ -77,6 +78,46 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         return newChallengeText;
     }
+
+    public Challenge skipChallenge(Long userId, Long challengeId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getSkipCountToday() >= 2) {
+            throw new RuntimeException("Daily skip limit reached");
+        }
+
+        // Zorluk düşür (örnek)
+        DifficultyType current = user.getDifficulty();
+        if (current == DifficultyType.HARD) user.setDifficulty(DifficultyType.MEDIUM);
+        else if (current == DifficultyType.MEDIUM) user.setDifficulty(DifficultyType.EASY);
+
+        user.setSkipCountToday(user.getSkipCountToday() + 1);
+        userRepository.save(user);
+
+        // İlgili Challenge güncellenebilir veya loglanabilir
+        return challengeRepository.findById(challengeId)
+                .map(challengeMapper::entityToDomain)
+                .orElseThrow(() -> new RuntimeException("Challenge not found"));
+    }
+
+    public Challenge completeChallenge(Long userId, Long challengeId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ChallengeEntity challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new RuntimeException("Challenge not found"));
+
+        if (!user.isRewardGivenToday()) {
+            user.setCoin(user.getCoin() + 1);
+            user.setRewardGivenToday(true);
+            userRepository.save(user);
+        }
+
+        challenge.setCompleted(true);
+        return challengeMapper.entityToDomain(challengeRepository.save(challenge));
+    }
+
+
 
 
 

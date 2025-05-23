@@ -39,6 +39,16 @@ public class ChallengeController {
         }
     }
 
+    @PostMapping("/{id}/skip")
+    public ResponseEntity<Challenge> skipChallenge(@RequestParam Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(challengeService.skipChallenge(userId, id));
+    }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Challenge> completeChallenge(@RequestParam Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(challengeService.completeChallenge(userId, id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Challenge> getChallengeById(@PathVariable Long id) {
         return challengeService.findChallengeById(id)

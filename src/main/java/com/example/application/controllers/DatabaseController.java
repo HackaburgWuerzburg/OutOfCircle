@@ -2,13 +2,14 @@ package com.example.application.controllers;
 
 import com.example.domain.enums.DifficultyType;
 import com.example.domain.enums.MoodTag;
-import com.example.domain.models.*;
-import com.example.domain.ports.*;
 import com.example.infrastructure.persistence.entity.*;
 import com.example.infrastructure.persistence.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class DatabaseController {
     public ResponseEntity<String> fillDatabase() {
         List<UserEntity> users = new ArrayList<>();
         users.add(new UserEntity("alice@example.com", "123456", "alice", DifficultyType.EASY));
-        users.add(new UserEntity("bob@example.com", "654321", "bob", DifficultyType.MEDIUM));
+        users.add(new UserEntity("bob@example.com", "654321", "bob", DifficultyType.HARD));
         userRepository.saveAll(users);
 
         List<JournalEntity> journals = new ArrayList<>();

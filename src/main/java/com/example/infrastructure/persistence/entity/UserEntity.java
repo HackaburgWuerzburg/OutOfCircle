@@ -24,6 +24,15 @@ public class UserEntity {
     @Column(name = "difficulty", nullable = false)
     private DifficultyType difficulty;
 
+    @Column(name = "skip_count_today")
+    private int skipCountToday;
+
+    @Column(name = "reward_given_today")
+    private boolean rewardGivenToday;
+
+    @Column(name = "coin")
+    private int coin;
+
     public UserEntity() {
     }
 
@@ -32,6 +41,9 @@ public class UserEntity {
         this.password = password;
         this.username = username;
         this.difficulty = difficulty;
+        this.skipCountToday = 2;
+        this.rewardGivenToday = false;
+        this.coin = 0;
     }
 
     public Long getId() {
@@ -72,5 +84,29 @@ public class UserEntity {
 
     public void setDifficulty(DifficultyType difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int getSkipCountToday() {
+        return skipCountToday;
+    }
+
+    public void setSkipCountToday(int skipCountToday) {
+        this.skipCountToday = skipCountToday;
+    }
+
+    public boolean isRewardGivenToday() {
+        return rewardGivenToday;
+    }
+
+    public void setRewardGivenToday(boolean rewardGivenToday) {
+        this.rewardGivenToday = rewardGivenToday;
+    }
+
+    public int getCoin() {
+        return coin;
+    }
+
+    public void setCoin(int coin) {
+        this.coin = coin;
     }
 }

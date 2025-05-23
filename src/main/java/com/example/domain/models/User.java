@@ -8,6 +8,9 @@ public class User {
     private String password;
     private String username;
     private DifficultyType difficulty;
+    private int skipCountToday;
+    private boolean rewardGivenToday;
+    private int coin;
 
     public User() {
     }
@@ -18,6 +21,9 @@ public class User {
         this.password = password;
         this.username = username;
         this.difficulty = difficulty;
+        this.skipCountToday = 2;
+        this.rewardGivenToday = false;
+        this.coin = 0;
     }
 
     public Long getId() {
@@ -58,5 +64,29 @@ public class User {
 
     public void setDifficulty(DifficultyType difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int getSkipCountToday() {
+        return skipCountToday;
+    }
+
+    public void setSkipCountToday(int skipCountToday) {
+        this.skipCountToday = skipCountToday;
+    }
+
+    public boolean isRewardGivenToday() {
+        return rewardGivenToday;
+    }
+
+    public void setRewardGivenToday(boolean rewardGivenToday) {
+        this.rewardGivenToday = rewardGivenToday;
+    }
+
+    public int getCoin() {
+        return coin;
+    }
+
+    public void setCoin(int coin) {
+        this.coin = coin;
     }
 }
