@@ -1,5 +1,7 @@
 package com.example.infrastructure.persistence.entity;
 
+import com.example.domain.enums.DifficultyType;
+import com.example.domain.enums.TopicType;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,13 +21,35 @@ public class UserEntity {
     @Column(nullable = false)
     private String username;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty")
+    private DifficultyType difficulty;
+
+    @Column(name = "skip_count_today")
+    private int skipCountToday;
+
+    @Column(name = "reward_given_today")
+    private boolean rewardGivenToday;
+
+    @Column(name = "coin")
+    private int coin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "topic")
+    private TopicType topic;
+
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password, String username) {
+    public UserEntity(String email, String password, String username, DifficultyType difficulty) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.difficulty = difficulty;
+        this.skipCountToday = 2;
+        this.rewardGivenToday = false;
+        this.coin = 0;
+        this.topic = null;
     }
 
     public Long getId() {
@@ -58,5 +82,45 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public DifficultyType getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(DifficultyType difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getSkipCountToday() {
+        return skipCountToday;
+    }
+
+    public void setSkipCountToday(int skipCountToday) {
+        this.skipCountToday = skipCountToday;
+    }
+
+    public boolean isRewardGivenToday() {
+        return rewardGivenToday;
+    }
+
+    public void setRewardGivenToday(boolean rewardGivenToday) {
+        this.rewardGivenToday = rewardGivenToday;
+    }
+
+    public int getCoin() {
+        return coin;
+    }
+
+    public void setCoin(int coin) {
+        this.coin = coin;
+    }
+
+    public TopicType getTopic() {
+        return topic;
+    }
+
+    public void setTopic(TopicType topic) {
+        this.topic = topic;
     }
 }

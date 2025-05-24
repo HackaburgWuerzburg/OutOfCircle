@@ -11,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/challenges")
@@ -25,6 +24,29 @@ public class ChallengeController {
     public ChallengeController(ChallengeServiceImpl challengeService, ChallengeMapper challengeMapper) {
         this.challengeService = challengeService;
         this.challengeMapper = challengeMapper;
+    }
+
+    @GetMapping("/generate/{userId}")
+    public ResponseEntity<?> generateNewChallenge(@PathVariable Long userId) {
+        try {
+            String challenge = challengeService.generateAndSaveChallenge(userId);
+            return ResponseEntity.ok(challenge);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or journal not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Challenge generation failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/skip")
+    public ResponseEntity<Challenge> skipChallenge(@RequestParam Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(challengeService.skipChallenge(userId, id));
+    }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Challenge> completeChallenge(@RequestParam Long userId, @PathVariable Long id) {
+        return ResponseEntity.ok(challengeService.completeChallenge(userId, id));
     }
 
     @GetMapping("/{id}")

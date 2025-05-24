@@ -4,10 +4,8 @@ import com.example.domain.enums.MoodTag;
 import com.example.domain.models.JournalSummary;
 import com.example.domain.ports.JournalSummaryService;
 import com.example.infrastructure.mapper.JournalSummaryMapper;
-import com.example.infrastructure.persistence.entity.JournalEntity;
 import com.example.infrastructure.persistence.entity.JournalSummaryEntity;
 import com.example.infrastructure.persistence.repository.JournalSummaryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

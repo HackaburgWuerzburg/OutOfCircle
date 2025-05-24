@@ -12,6 +12,7 @@ public interface JournalService {
     List<Journal> findJournalByUserId(Long userId);
     Optional<Journal> findJournalByDate(LocalDate date);
     List<Journal> findAllJournals();
+    Optional<Journal> findLatestJournalByUserId(Long userId);
 
     //mutation
     Journal createJournal(Journal journal);

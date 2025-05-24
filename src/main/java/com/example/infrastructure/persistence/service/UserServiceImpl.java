@@ -1,11 +1,12 @@
 package com.example.infrastructure.persistence.service;
 
+import com.example.domain.enums.TopicType;
 import com.example.domain.models.User;
 import com.example.domain.ports.UserService;
 import com.example.infrastructure.mapper.UserMapper;
 import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,41 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final LLMServiceImpl llmService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, LLMServiceImpl llmService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.llmService = llmService;
     }
+
+    @Override
+    public void assignTopicFromQuestionnaire(Long userId, String promptText) {
+        String topicStr = llmService.detectTopicFromQuestionnaire(promptText);
+
+        TopicType topicEnum;
+        try {
+            topicEnum = TopicType.valueOf(topicStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid topic from LLM: " + topicStr);
+        }
+
+        Optional<User> user = userRepository.findById(userId).map(userMapper::entityToDomain);
+        user.get().setTopic(topicEnum);
+        UserEntity savedUserEntity = userRepository.save(userMapper.domainToEntity(user.orElse(null)));
+        userMapper.entityToDomain(savedUserEntity);
+    }
+
+
+    @Override
+    public void updateUserTopic(Long userId, String topicStr) {
+        TopicType topicEnum = TopicType.valueOf(topicStr.toUpperCase());
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setTopic(topicEnum);
+        userRepository.save(user);
+    }
+
 
     @Override
     public Optional<User> findUserById(Long id) {
@@ -69,5 +100,16 @@ public class UserServiceImpl implements UserService {
         } else{
             return false;
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // her gece 00:00'da çalışır
+    public void resetDailyUserStats() {
+        List<UserEntity> users = userRepository.findAll();
+        for (UserEntity user : users) {
+            user.setSkipCountToday(0);
+            user.setRewardGivenToday(false);
+        }
+        userRepository.saveAll(users);
+        System.out.println("✅ Daily user stats reset.");
     }
 }
