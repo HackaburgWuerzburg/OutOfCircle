@@ -8,6 +8,7 @@ public class UserInput {
     private String password;
     private String username;
     private DifficultyType difficulty;
+    private int skipCountToday = 2;
     //private TopicType topic;
 
     public String getEmail() {

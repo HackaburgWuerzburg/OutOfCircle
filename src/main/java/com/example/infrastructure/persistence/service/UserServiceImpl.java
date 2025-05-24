@@ -6,6 +6,7 @@ import com.example.domain.ports.UserService;
 import com.example.infrastructure.mapper.UserMapper;
 import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,19 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.llmService = llmService;
+    }
+
+    @Override
+    public void skipChallenge(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User bulunamadı."));
+
+        if (userEntity.getSkipCountToday() <= 0) {
+            throw new IllegalStateException("Bugünlük skip hakkınız bitti!");
+        }
+
+        userEntity.setSkipCountToday(userEntity.getSkipCountToday() - 1);
+        userRepository.save(userEntity);
     }
 
     @Override
@@ -81,6 +95,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        user.setSkipCountToday(2);
+        user.setRewardGivenToday(false);
+        user.setCoin(0);
         UserEntity savedUserEntity = userRepository.save(userMapper.domainToEntity(user));
         return userMapper.entityToDomain(savedUserEntity);
     }

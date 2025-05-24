@@ -23,6 +23,12 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
+    @PostMapping("/{userId}/skip-challenge")
+    public ResponseEntity<Void> skipChallenge(@PathVariable Long userId) {
+        userService.skipChallenge(userId);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/{userId}/assign-topic-from-answers")
     public ResponseEntity<String> assignTopicFromAnswers(
             @PathVariable Long userId,

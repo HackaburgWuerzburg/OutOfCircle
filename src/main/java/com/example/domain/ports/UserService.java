@@ -12,7 +12,7 @@ public interface UserService {
     List<User> findAllUsers();
     void updateUserTopic(Long userId, String topicStr);
     void assignTopicFromQuestionnaire(Long userId, String promptText);
-
+    void skipChallenge(Long userId);
 
     //mutation
     User createUser(User user);
