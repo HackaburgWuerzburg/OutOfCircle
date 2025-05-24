@@ -22,7 +22,7 @@ public class UserEntity {
     private String username;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "difficulty", nullable = false)
+    @Column(name = "difficulty")
     private DifficultyType difficulty;
 
     @Column(name = "skip_count_today")
@@ -41,7 +41,7 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password, String username, DifficultyType difficulty, TopicType topic) {
+    public UserEntity(String email, String password, String username, DifficultyType difficulty) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -49,7 +49,7 @@ public class UserEntity {
         this.skipCountToday = 2;
         this.rewardGivenToday = false;
         this.coin = 0;
-        this.topic = topic;
+        this.topic = null;
     }
 
     public Long getId() {

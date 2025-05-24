@@ -6,7 +6,6 @@ import com.example.domain.ports.UserService;
 import com.example.infrastructure.mapper.UserMapper;
 import com.example.infrastructure.persistence.entity.UserEntity;
 import com.example.infrastructure.persistence.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +36,10 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Invalid topic from LLM: " + topicStr);
         }
 
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setTopic(topicEnum);
-        userRepository.save(user);
+        Optional<User> user = userRepository.findById(userId).map(userMapper::entityToDomain);
+        user.get().setTopic(topicEnum);
+        UserEntity savedUserEntity = userRepository.save(userMapper.domainToEntity(user.orElse(null)));
+        userMapper.entityToDomain(savedUserEntity);
     }
 
 

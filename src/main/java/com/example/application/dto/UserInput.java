@@ -1,12 +1,14 @@
 package com.example.application.dto;
 
 import com.example.domain.enums.DifficultyType;
+import com.example.domain.enums.TopicType;
 
 public class UserInput {
     private String email;
     private String password;
     private String username;
     private DifficultyType difficulty;
+    //private TopicType topic;
 
     public String getEmail() {
         return email;

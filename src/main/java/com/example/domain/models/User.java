@@ -12,12 +12,12 @@ public class User {
     private int skipCountToday;
     private boolean rewardGivenToday;
     private int coin;
-    private TopicType topicType;
+    private TopicType topic;
 
     public User() {
     }
 
-    public User(Long id, String email, String password, String username, DifficultyType difficulty) {
+    public User(Long id, String email, String password, String username, DifficultyType difficulty, TopicType topic) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -26,7 +26,7 @@ public class User {
         this.skipCountToday = 2;
         this.rewardGivenToday = false;
         this.coin = 0;
-        this.topicType = null;
+        this.topic = topic;
     }
 
     public Long getId() {
@@ -93,11 +93,11 @@ public class User {
         this.coin = coin;
     }
 
-    public TopicType getTopicType() {
-        return topicType;
+    public TopicType getTopic() {
+        return topic;
     }
 
-    public void setTopicType(TopicType topicType) {
-        this.topicType = topicType;
+    public void setTopic(TopicType topic) {
+        this.topic = topic;
     }
 }
